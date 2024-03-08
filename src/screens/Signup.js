@@ -1,10 +1,10 @@
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
 // import AppLoading from "expo-app-loading";
 // import {useFonts} from "expo-font";
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
-
+import axios from 'axios';
 // const handleName = (() =>{
 //   console.log("handle name on change");
 // })
@@ -18,6 +18,30 @@ const Signup = () => {
     const [email, setEmail] = useState("");
     const [emailVerify, setEmailVerify] = useState(false);
     const navigation = useNavigation();
+
+    const handleSubmit = ((e) =>{
+
+      const userData = {name:name , email:email, password: email};
+
+      if ( nameVerify && emailVerify && passwordVerify){
+        axios
+        .post("http://192.168.53.156:5000/signup",userData)
+        .then(res => {
+          console.log(res.data);
+          if ( res.data.status === "ok"){
+            Alert.alert("Sign up Successfull!");
+            navigation.navigate('Login');
+          }
+          else{
+            Alert.alert(JSON.stringify(res.data));
+          }
+        })
+        .catch(e=> console.log(e));
+      }
+      else{
+        Alert.alert('Fill mandatory details');
+      }
+    })
 
     const handleName = ((e) =>{
       const nameVar = e.nativeEvent.text;
@@ -40,7 +64,7 @@ const Signup = () => {
     const handlePassword = ((e) => {
       const passwordVar = e.nativeEvent.text;
       setPassword(passwordVar);
-      console.log(passwordVar);
+      // console.log(passwordVar);
       setPasswordVerify(false);
       if ( passwordVar.length > 6){
         setPasswordVerify(true);
@@ -85,12 +109,15 @@ const Signup = () => {
       {password.length<1 ? null : passwordVerify ? (<Feather name='check-circle' color='green' size={20}/>) :
        (<Feather name='alert-triangle' size={20} color='red'/>)}
 
-      <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}
-      onPress={() => {
-        navigation.navigate('Login');
-      }}>
+      <TouchableOpacity
+        style={[styles.buttonStyle, {backgroundColor: "#463"}]}
+        onPress={() => {
+          handleSubmit()
+        }}
+      >
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
+
     </View>
     </ScrollView>
   )
