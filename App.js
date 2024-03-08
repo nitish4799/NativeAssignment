@@ -1,16 +1,8 @@
 import { View } from 'react-native';
-import Home from './src/screens/Home';
-import Login from './src/screens/Login';
-import Signup from './src/screens/Signup'
+import RootStack from './src/navigators/Rootstack';
 
 export default function App() {
-  return (
-    <View>
-      <Signup/>
-      {/* <Login/> */}
-      {/* <Home/> */}
-    </View>
-  );
+  return <RootStack/>;
 }
 
 

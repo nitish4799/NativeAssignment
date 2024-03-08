@@ -2,11 +2,14 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import React, { useState } from 'react';
 import AppLoading from "expo-app-loading";
 import {useFonts} from "expo-font";
+import { useNavigation } from '@react-navigation/native';
 
 const Signup = () => {
 
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const navigation = useNavigation();
 
   return (
     <View style={styles.mainContainer}>
@@ -19,14 +22,17 @@ const Signup = () => {
       <View style={styles.inputContainer}>
         <Text style={styles.labels} >Enter Your Email</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
-        value={userName} onChangeText={(currentData) => setUserName(currentData)}/>
+        value={email} onChangeText={(currentData) => setEmail(currentData)}/>
       </View>
       <View style={styles.inputContainer} >
         <Text style={styles.labels} >Enter Your Password</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} secureTextEntry={true}
         value={password} onChangeText={(currentPass) => setPassword(currentPass)}/>
       </View>
-      <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}>
+      <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}
+      onPress={() => {
+        navigation.navigate('Login');
+      }}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 15,
         textTransform: "capitalize",
-        fontFamily: "bold",
+        // fontFamily: "bold",
     },
     inputContainer: {
         marginTop: 20,
@@ -64,7 +70,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         borderWidth: 1,
-        borderBlockColor: "rgba(0,0,0,0.3)",
+        // borderBlockColor: "rgba(0,0,0,0.3)",
         paddingHorizontal: 15,
         paddingVertical: 7,
         borderRadius: 15,
