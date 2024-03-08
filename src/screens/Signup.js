@@ -1,34 +1,90 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import AppLoading from "expo-app-loading";
-import {useFonts} from "expo-font";
+// import AppLoading from "expo-app-loading";
+// import {useFonts} from "expo-font";
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
+
+// const handleName = (() =>{
+//   console.log("handle name on change");
+// })
 
 const Signup = () => {
 
-    const [userName, setUserName] = useState("");
+    const [name, setName] = useState("");
+    const [nameVerify , setNameVerify] = useState(false);
     const [password, setPassword] = useState("");
+    const [passwordVerify, setPasswordVerify] = useState(false);
     const [email, setEmail] = useState("");
+    const [emailVerify, setEmailVerify] = useState(false);
     const navigation = useNavigation();
 
+    const handleName = ((e) =>{
+      const nameVar = e.nativeEvent.text;
+      setName(nameVar);
+      setNameVerify(false);
+      {nameVar.length >= 1 ? setNameVerify(true) : setNameVerify(false) }
+      // console.log(e.nativeEvent.text);
+    })
+
+    const handleEmail = ((e) =>{
+      const emailVar = e.nativeEvent.text;
+      setEmail(emailVar);
+      setEmailVerify(false);
+      if (/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(emailVar)){
+        setEmail(emailVar);
+        setEmailVerify(true);
+      }
+    })
+
+    const handlePassword = ((e) => {
+      const passwordVar = e.nativeEvent.text;
+      setPassword(passwordVar);
+      console.log(passwordVar);
+      setPasswordVerify(false);
+      if ( passwordVar.length > 6){
+        setPasswordVerify(true);
+      }
+    })
+
   return (
+    <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
     <View style={styles.mainContainer}>
       <Text style={styles.mainHeader}>Sign Up</Text>
+
       <View style={styles.inputContainer}>
         <Text style={styles.labels} >Enter Your name</Text>
-        <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
-        value={userName} onChangeText={(currentData) => setUserName(currentData)}/>
+        <TextInput style={styles.inputStyle} autoCapitalize='none' autoCorrect={false} 
+        value={name} onChange={e => handleName(e)}/>
+        {name.length < 1 ? null : nameVerify ? <Feather name='check-circle' color='green' size={20}/> :
+         <Feather name='alert-triangle' size={20} color='red'/>}
       </View>
+      {name.length < 1 ? null : nameVerify ? null : (
+        <Text>Required Field</Text>
+      )}
+
       <View style={styles.inputContainer}>
         <Text style={styles.labels} >Enter Your Email</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
-        value={email} onChangeText={(currentData) => setEmail(currentData)}/>
+        value={email} onChange={e => handleEmail(e)}/>
       </View>
+      {email.length<1 ? null : emailVerify ? (<Feather name='check-circle' color='green' size={20}/>) :
+       (<Feather name='alert-triangle' size={20} color='red'/>)}
+
+      {/* <View style={styles.inputContainer}>
+        <Text style={styles.labels} >Enter Your Phone Number</Text>
+        <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
+        value={ph_number} />
+      </View> */}
+
       <View style={styles.inputContainer} >
         <Text style={styles.labels} >Enter Your Password</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} secureTextEntry={true}
-        value={password} onChangeText={(currentPass) => setPassword(currentPass)}/>
+        value={password} onChange={e => handlePassword(e)}/>
       </View>
+      {password.length<1 ? null : passwordVerify ? (<Feather name='check-circle' color='green' size={20}/>) :
+       (<Feather name='alert-triangle' size={20} color='red'/>)}
+
       <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}
       onPress={() => {
         navigation.navigate('Login');
@@ -36,6 +92,7 @@ const Signup = () => {
         <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   )
 }
 
