@@ -1,8 +1,10 @@
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native'
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import Button from './components/Button';
 
 const Login = () => {
 
@@ -10,6 +12,7 @@ const Login = () => {
     const [emailVerify, setEmailVerify] = useState(false);
     const [password, setPassword] = useState("");
     const [passwordVerify, setPasswordVerify] = useState(false);
+    const [isPasswordShown, setIsPasswordShown] = useState(true);
     const navigation = useNavigation();
 
     const handleEmail = ((e)=>{
@@ -56,32 +59,44 @@ const Login = () => {
     })
 
   return (
-    <View style={styles.mainContainer}>
-      <Text style={styles.mainHeader}>Log In</Text>
+    <SafeAreaView style={{ flex:1 , backgroundColor: "white"}}>
+      <View style={{flex:1, marginHorizontal:22}}>
+        <View style={{marginVertical: 22}}>
+          <Text style={{fontSize:22, fontWeight: 'bold', marginVertical: 12, color: 'black'}}>Welcome Back!</Text>
+        </View>
 
-      <View style={styles.inputContainer}>
-        <Text style={styles.labels} >Enter email</Text>
-        <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
-        value={email} onChange={e => handleEmail(e)}/>
+        <View style={{marginBottom: 12}}>
+          <Text style={{fontSize: 16, fontWeight:400, marginVertical:8}} >Email address</Text>
+          <View style={{width:'100%', height:48, borderColor: 'black', borderWidth: 1, borderRadius:8,
+            alignItems:'center', justifyContent:'center', paddingLeft:22}}>
+              <TextInput placeholder='Enter your email address' placeholderTextColor='grey' 
+              keyboardType='email-address' style={{width:'100%'}} value={email} onChange={e => handleEmail(e)}/>
+          </View>
+        </View>
+
+        <View style={{marginBottom: 12}}>
+          <Text style={{fontSize: 16, fontWeight:400, marginVertical:8}} >Password</Text>
+          <View style={{width:'100%', height:48, borderColor: 'black', borderWidth: 1, borderRadius:8,
+            alignItems:'center', justifyContent:'center', paddingLeft:22}}>
+              <TextInput placeholder='Enter your password' placeholderTextColor='grey' 
+              secureTextEntry={isPasswordShown} style={{width:'100%'}} value={password} onChange={e=> handlePassword(e)}/>
+              <TouchableOpacity style={{position:'absolute', right:12}}>
+                {isPasswordShown ? <Ionicons name='eye-off' size={24} color='black' onPress={()=> setIsPasswordShown(false)}/> :
+                <Ionicons name='eye' size={24} color='black' onPress={()=> setIsPasswordShown(true)}/>}
+              </TouchableOpacity>
+          </View>
+        </View>
+
+        <Button title='Log In' filled style={{marginTop:18, marginBottom:4}}  onPress={() => {handleSubmit()}}/>
+
+        <View style={{flexDirection:'row', justifyContent:'center', marginVertical: 22}}>
+          <Text style={{fontSize:16, color:'black'}}>Don't have an account?</Text>
+          <Pressable onPress={()=> navigation.navigate('Signup')}>
+            <Text style={{fontSize: 16, color:"#0072C6", fontWeight:'bold', marginLeft:6}}>Signup</Text>
+          </Pressable>
+        </View>
       </View>
-      {email.length < 1 ? null : emailVerify ? (<Feather name='check-circle' color='green' size={20}/>) : 
-      (<Feather name='alert-triangle' size={20} color='red'/>)}
-
-      <View style={styles.inputContainer} >
-        <Text style={styles.labels} >Enter Your Password</Text>
-        <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} secureTextEntry={true}
-        value={password} onChange={e=> handlePassword(e)}/>
-      </View>
-      {password.length < 1 ? null : passwordVerify ? (<Feather name='check-circle' color='green' size={20}/>) : 
-      (<Feather name='alert-triangle' size={20} color='red'/>)}
-
-      <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}
-      onPress={() => {
-        handleSubmit()
-      }}>
-        <Text style={styles.buttonText}>LogIn</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 
