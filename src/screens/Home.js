@@ -4,15 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 
 const Home = () => {
   return (
-  //   <View style={[styles.mainContainer, styles.blueBackground]}>
-  //     <View style={styles.homeTop}>
-  //       <Image style={styles.headerImage} source={require("../../assets/logo.jpg")}
-  //         resizeMode='contain'/>
-  //       <Text style={[styles.mainHeader , {
-  //         fontSize: 33, color: "#000000"
-  //       }]}>Welcome to Home Page</Text>
-  //     </View>
-  //  </View>
   <LinearGradient style={{ flex: 1 }} colors={['#0072C6', '#002060']}>
         <View style={{flex:1}}>
             <View>
@@ -99,38 +90,5 @@ const Home = () => {
     </LinearGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    height: "100%",
-    display: "flex",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    textAlign: "center",
-  },
-  blueBackground: {
-    backgroundColor: "#87ceeb",
-  },
-  homeTop: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 10,
-  },
-  headerImage: {
-    height: undefined,
-    width: "100%",
-    aspectRatio: 1,
-    display:"flex",
-    alignItems: "stretch",
-    marginTop: 50,
-    borderRadius: 20,
-  },
-  mainHeader: {
-    fontSize: 30,
-    color: "#344055",
-    textTransform: "uppercase"
-  }
-});
 
 export default Home;
