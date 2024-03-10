@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import {Text, View, Image, Pressable } from 'react-native';
 import React from 'react';
 import {LinearGradient} from "expo-linear-gradient";
-// import COLORS from '../../Constants/Colors';
 import Button from './components/Button';
 import { useNavigation } from '@react-navigation/native';
 
@@ -122,6 +121,4 @@ const Welcome = ( ) => {
   )
 }
 
-export default Welcome
-
-// const styles = StyleSheet.create({})
+export default Welcome;
