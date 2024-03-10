@@ -1,31 +1,83 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react';
-import AppLoading from "expo-app-loading";
-import {useFonts} from "expo-font";
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
+import axios from 'axios';
 
 const Login = () => {
 
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
+    const [emailVerify, setEmailVerify] = useState(false);
     const [password, setPassword] = useState("");
+    const [passwordVerify, setPasswordVerify] = useState(false);
     const navigation = useNavigation();
+
+    const handleEmail = ((e)=>{
+      const emailVar = e.nativeEvent.text;
+      setEmail(emailVar);
+      if (/^[\w.%+-]+@[\w.-]+\.[a-zA-Z]{2,}$/.test(emailVar)){
+        setEmail(emailVar);
+        setEmailVerify(true);
+      }
+    })
+
+    const handlePassword = ((e) =>{
+      const passwordVar = e.nativeEvent.text; 
+      setPassword(passwordVar);
+      setPasswordVerify(false);
+      if ( passwordVar.length > 6){
+        setPasswordVerify(true);
+      }
+    })
+
+    const handleSubmit =  ((e) => {
+      // navigation.navigate('Home')
+      const userData = {email , password};
+
+      if ( emailVerify && passwordVerify){
+        axios
+        .post("http://192.168.53.156:5000/login" , userData)
+        .then(res =>{
+          if ( res.data === "User doesn't exist" ){
+            Alert.alert(res.data);
+            navigation.navigate('Signup');
+          }
+          else{
+            if ( res.data.status === "Login Successfull"){
+              navigation.navigate('Home');
+            }
+            else{
+              Alert.alert(res.data.status);
+            }
+          }
+        })
+        .catch(e => console.log(e));
+      }
+    })
 
   return (
     <View style={styles.mainContainer}>
       <Text style={styles.mainHeader}>Log In</Text>
+
       <View style={styles.inputContainer}>
-        <Text style={styles.labels} >Enter Username</Text>
+        <Text style={styles.labels} >Enter email</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} 
-        value={userName} onChangeText={(currentData) => setUserName(currentData)}/>
+        value={email} onChange={e => handleEmail(e)}/>
       </View>
+      {email.length < 1 ? null : emailVerify ? (<Feather name='check-circle' color='green' size={20}/>) : 
+      (<Feather name='alert-triangle' size={20} color='red'/>)}
+
       <View style={styles.inputContainer} >
         <Text style={styles.labels} >Enter Your Password</Text>
         <TextInput style={styles.inputStyle} autoCapitalize='none'autoCorrect={false} secureTextEntry={true}
-        value={password} onChangeText={(currentPass) => setPassword(currentPass)}/>
+        value={password} onChange={e=> handlePassword(e)}/>
       </View>
+      {password.length < 1 ? null : passwordVerify ? (<Feather name='check-circle' color='green' size={20}/>) : 
+      (<Feather name='alert-triangle' size={20} color='red'/>)}
+
       <TouchableOpacity style={[styles.buttonStyle ,{backgroundColor: "#463"} ]}
       onPress={() => {
-        navigation.navigate('Home');
+        handleSubmit()
       }}>
         <Text style={styles.buttonText}>LogIn</Text>
       </TouchableOpacity>

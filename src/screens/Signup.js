@@ -21,13 +21,16 @@ const Signup = () => {
 
     const handleSubmit = ((e) =>{
 
-      const userData = {name:name , email:email, password: email};
+      const userData = {name:name , email:email, password: password};
 
       if ( nameVerify && emailVerify && passwordVerify){
         axios
         .post("http://192.168.53.156:5000/signup",userData)
         .then(res => {
           console.log(res.data);
+          if (res.data.status === "User already exist"){
+            navigation.navigate('Login');
+          }
           if ( res.data.status === "ok"){
             Alert.alert("Sign up Successfull!");
             navigation.navigate('Login');
